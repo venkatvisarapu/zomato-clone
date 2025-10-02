@@ -64,7 +64,7 @@ const loadData = async () => {
       }
     }
     
-    // Remove duplicates before inserting
+    
     const uniqueData = Array.from(new Map(allData.map(item => [item.RestaurantId, item])).values());
 
     await Restaurant.insertMany(uniqueData);

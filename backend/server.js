@@ -5,7 +5,7 @@ const cors = require("cors");
 
 console.log("🚀 Server is starting...");
 
-// Graceful shutdown and error handling
+
 process.on("uncaughtException", (err) => {
   console.error("❌ UNCAUGHT EXCEPTION! Shutting down...", err);
   process.exit(1);
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes
+
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const countryRoutes = require("./routes/countryRoutes");
 const imageSearchRoutes = require("./routes/imageSearchRoutes");
@@ -41,7 +41,7 @@ app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/countries", countryRoutes);
 app.use("/api/image", imageSearchRoutes);
 
-// Global Error Handler
+
 app.use((err, req, res, next) => {
   console.error("🔥 GLOBAL ERROR HANDLER:", err.stack);
   res.status(500).json({ error: "An internal server error occurred.", details: err.message });

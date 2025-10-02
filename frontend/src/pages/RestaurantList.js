@@ -9,19 +9,19 @@ const RestaurantList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
-  const [isSearching, setIsSearching] = useState(false); // ✨ New state to track search mode
+  const [isSearching, setIsSearching] = useState(false); 
 
-  // This function will be our single source for fetching data
+  
   const fetchRestaurants = (currentPage, query) => {
     setLoading(true);
     let url;
 
     if (query) {
-      // We are in search mode
+      
       setIsSearching(true);
       url = `${API_BASE_URL}/restaurants/search?query=${encodeURIComponent(query)}`;
     } else {
-      // We are in pagination mode
+      
       setIsSearching(false);
       url = `${API_BASE_URL}/restaurants?page=${currentPage}`;
     }
@@ -29,7 +29,7 @@ const RestaurantList = () => {
     axios.get(url)
       .then(res => {
         setRestaurants(res.data.restaurants);
-        // Set total pages only if we are not searching, as the search endpoint doesn't provide it
+        
         setTotalPages(res.data.totalPages || 1);
         setLoading(false);
       })
@@ -39,26 +39,25 @@ const RestaurantList = () => {
       });
   };
 
-  // ✨ CHANGE #1: Use a useEffect hook that runs whenever the 'page' changes
-  // This will handle both the initial load and clicking the "Next"/"Previous" buttons.
+  
   useEffect(() => {
-    // Only run this if we are NOT in search mode.
+    
     if (!isSearching) {
       fetchRestaurants(page, "");
     }
-  }, [page]); // This effect depends on the 'page' state
+  }, [page]); 
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setPage(1); // Reset to first page for new search
+    setPage(1);
     fetchRestaurants(1, searchQuery);
   };
   
-  // ✨ CHANGE #2: Add a function to clear the search and return to the main list
+  
   const clearSearch = () => {
       setSearchQuery("");
       setIsSearching(false);
-      // Fetch the first page of the full list again
+      
       fetchRestaurants(1, ""); 
   };
 
@@ -75,7 +74,7 @@ const RestaurantList = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button type="submit">Search</button>
-          {/* ✨ CHANGE #3: Add a clear button that appears during a search */}
+          {}
           {isSearching && (
             <button type="button" onClick={clearSearch} style={{backgroundColor: '#6c757d'}}>Clear</button>
           )}
@@ -106,7 +105,7 @@ const RestaurantList = () => {
         </div>
       )}
 
-      {/* ✨ CHANGE #4: Show pagination only when NOT searching and if there's more than one page */}
+      {}
       {!isSearching && totalPages > 1 && (
         <div className="pagination">
           <button onClick={() => setPage(p => Math.max(p - 1, 1))} disabled={page === 1}>Previous</button>

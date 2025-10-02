@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Restaurant = require("../models/Restaurant");
 
-// ✨ IMPROVEMENT: More robust search that handles multiple fields
+
 router.get("/search", async (req, res) => {
   try {
     const { query } = req.query;
@@ -18,14 +18,14 @@ router.get("/search", async (req, res) => {
       };
     }
 
-    const restaurants = await Restaurant.find(filter).limit(50); // Limit results for performance
+    const restaurants = await Restaurant.find(filter).limit(50);
     res.json({ total: restaurants.length, restaurants });
   } catch (error) {
     res.status(500).json({ error: "Server error during search" });
   }
 });
 
-// ✨ IMPROVEMENT: Accurate nearby search using MongoDB's geospatial queries
+
 router.get("/nearby", async (req, res) => {
   try {
     const { lat, lng, range } = req.query;
@@ -36,14 +36,14 @@ router.get("/nearby", async (req, res) => {
 
     const userLat = parseFloat(lat);
     const userLng = parseFloat(lng);
-    const maxDistance = parseFloat(range) * 1000; // Convert km to meters
+    const maxDistance = parseFloat(range) * 1000;
 
     const restaurants = await Restaurant.find({
       Location: {
         $nearSphere: {
           $geometry: {
             type: "Point",
-            coordinates: [userLng, userLat], // MongoDB requires [longitude, latitude]
+            coordinates: [userLng, userLat],
           },
           $maxDistance: maxDistance,
         },
@@ -59,12 +59,12 @@ router.get("/nearby", async (req, res) => {
   }
 });
 
-// GET all restaurants with pagination
+
 router.get("/", async (req, res) => {
   try {
     let { page, limit } = req.query;
     page = parseInt(page) || 1;
-    limit = parseInt(limit) || 12; // Adjusted for a 3-column grid
+    limit = parseInt(limit) || 12; 
     const skip = (page - 1) * limit;
 
     const restaurants = await Restaurant.find().skip(skip).limit(limit);
@@ -81,7 +81,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET restaurant by ID (must be last to avoid conflicts with other routes)
+
 router.get("/:id", async (req, res) => {
   try {
     if (isNaN(req.params.id)) {
